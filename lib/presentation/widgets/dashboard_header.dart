@@ -1,118 +1,157 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/user.dart';
 
 /// Presentation Widget - Dashboard Header
+/// Matches the frontend FarmArchive design exactly
 class DashboardHeader extends StatelessWidget {
-  final User? user;
-  final Function(String) onSearch;
-  final bool showDrawerButton;
-  final VoidCallback? onDrawerPressed;
+  final TextEditingController? searchController;
+  final String? username;
+  final String? roleLabel;
 
   const DashboardHeader({
     super.key,
-    this.user,
-    required this.onSearch,
-    this.showDrawerButton = false,
-    this.onDrawerPressed,
+    this.searchController,
+    this.username,
+    this.roleLabel,
   });
 
   @override
   Widget build(BuildContext context) {
+    final displayUsername = username ?? 'User';
+    final displayRole = roleLabel ?? 'Admin';
+
     return Container(
-      height: 70,
-      color: Colors.grey[100],
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      height: 64, // Header height
+      color: const Color(0xFF0F172A), // bg-slate-900
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Color(0xFF1E293B),
+            width: 1,
+          ), // border-slate-800
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 16,
+      ), // px-6 py-4
       child: Row(
         children: [
-          // Drawer button (mobile only)
-          if (showDrawerButton && onDrawerPressed != null)
-            IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: onDrawerPressed,
-            ),
-          // Search Bar
+          // Search Bar (on the left)
           Expanded(
-            child: Container(
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.grey[300]!),
-              ),
-              child: TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Search...',
-                  prefixIcon: Icon(Icons.search, color: Colors.grey),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
+            flex: 1,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 384), // max-w-md
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E293B), // bg-slate-800
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: const Color(0xFF334155),
+                  ), // border-slate-700
                 ),
-                onSubmitted: onSearch,
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          // User Info
-          if (user != null) ...[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'Admin',
-                  style: TextStyle(fontSize: 12, color: Colors.grey[700]),
-                ),
-                Text(
-                  user!.username,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 8),
-            CircleAvatar(
-              backgroundColor: Colors.blue,
-              child: Text(
-                user!.firstName[0].toUpperCase(),
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-          const SizedBox(width: 16),
-          // Notifications
-          IconButton(
-            icon: Stack(
-              children: [
-                const Icon(Icons.notifications_outlined, size: 28),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+                child: TextField(
+                  controller: searchController,
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                    hintStyle: const TextStyle(
+                      color: Color(0xFF94A3B8),
+                    ), // text-slate-400
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Color(0xFF94A3B8), // text-slate-400
+                      size: 16, // h-4 w-4
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-            onPressed: () {
-              // Handle notifications
-            },
           ),
-          const SizedBox(width: 8),
-          // User Menu
-          IconButton(
-            icon: const Icon(Icons.account_circle, size: 28),
-            onPressed: () {
-              // Handle user menu
-            },
+
+          const SizedBox(width: 16), // gap-4
+          // Right side actions
+          Row(
+            children: [
+              // User Info
+              Row(
+                children: [
+                  const Icon(
+                    Icons.people,
+                    color: Color(0xFFCBD5E1), // text-slate-300
+                    size: 20, // h-5 w-5
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        displayRole,
+                        style: const TextStyle(
+                          color: Color(0xFF94A3B8), // text-slate-400
+                          fontSize: 12,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 140,
+                        child: Text(
+                          displayUsername,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              const SizedBox(width: 16),
+
+              // Notification Bell
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    // TODO: Show notifications
+                  },
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    child: const Icon(
+                      Icons.notifications_outlined,
+                      color: Color(0xFFCBD5E1), // text-slate-300
+                      size: 20, // h-5 w-5
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(width: 8),
+
+              // User Avatar
+              Container(
+                width: 32, // w-8
+                height: 32, // h-8
+                decoration: BoxDecoration(
+                  color: const Color(0xFF9333EA), // bg-purple-600
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 16, // h-4 w-4
+                ),
+              ),
+            ],
           ),
         ],
       ),

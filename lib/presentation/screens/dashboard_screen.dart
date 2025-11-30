@@ -102,19 +102,17 @@ class DashboardScreen extends ConsumerWidget {
     DashboardState dashboardState, {
     required bool isMobile,
   }) {
+    final TextEditingController searchController = TextEditingController();
+
     return Expanded(
       child: Column(
         children: [
           // Header
           DashboardHeader(
-            user: user,
-            showDrawerButton: isMobile,
-            onDrawerPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            onSearch: (query) {
-              // Handle search
-            },
+            searchController: searchController,
+            username: user?.username,
+            roleLabel:
+                'Admin', // Default role, can be updated based on user permissions
           ),
           // Main Content
           Expanded(
