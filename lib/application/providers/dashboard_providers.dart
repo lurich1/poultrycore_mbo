@@ -12,16 +12,23 @@ import '../states/dashboard_state.dart';
 
 // Dio instance
 final dioProvider = Provider<Dio>((ref) {
-  return Dio();
+  final dio = Dio();
+  dio.options = BaseOptions(
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+    validateStatus: (status) {
+      return status! < 500; // Accept all status codes < 500
+    },
+  );
+  return dio;
 });
 
 // Base URL - Poultry Farm API
 final baseUrlProvider = Provider<String>((ref) {
-  // Poultry Farm API URL (from launchSettings.json)
-  // HTTPS: https://localhost:7190
-  // HTTP: http://localhost:5142
-  // For production, update this to your deployed API URL
-  return 'https://localhost:7190';
+  // Poultry Farm API URL
+  // Production: https://farmapi.poultrycore.com
+  return 'https://farmapi.poultrycore.com';
 });
 
 // Dashboard data source

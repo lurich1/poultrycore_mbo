@@ -47,13 +47,23 @@ android {
     }
 }
 
-// KAPT configuration for compatibility with Kotlin 2.1.0
+// Hilt configuration to fix JavaPoet compatibility issue
+hilt {
+    enableAggregatingTask = false
+}
+
+// KAPT configuration for compatibility with Kotlin 2.0.0
 kapt {
     correctErrorTypes = true
     useBuildCache = true
     javacOptions {
         option("-source", "11")
         option("-target", "11")
+        option("-Xmaxerrs", "500")
+    }
+    arguments {
+        arg("dagger.fastInit", "enabled")
+        arg("dagger.formatGeneratedSource", "disabled")
     }
 }
 
@@ -73,9 +83,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.51")
-    kapt("com.google.dagger:hilt-compiler:2.51")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
