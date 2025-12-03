@@ -21,8 +21,8 @@ class DashboardHeader extends StatelessWidget {
 
     return Container(
       height: 64, // Header height
-      color: const Color(0xFF0F172A), // bg-slate-900
       decoration: const BoxDecoration(
+        color: Color(0xFF0F172A), // bg-slate-900
         border: Border(
           bottom: BorderSide(
             color: Color(0xFF1E293B),
