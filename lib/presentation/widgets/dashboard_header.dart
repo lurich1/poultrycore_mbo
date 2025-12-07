@@ -6,18 +6,25 @@ class DashboardHeader extends StatelessWidget {
   final TextEditingController? searchController;
   final String? username;
   final String? roleLabel;
+  final bool showMenuButton;
+  final VoidCallback? onMenuPressed;
 
   const DashboardHeader({
     super.key,
     this.searchController,
     this.username,
     this.roleLabel,
+    this.showMenuButton = false,
+    this.onMenuPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     final displayUsername = username ?? 'User';
     final displayRole = roleLabel ?? 'Admin';
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isVerySmall = screenWidth < 400;
+    final isSmall = screenWidth < 600;
 
     return Container(
       height: 64, // Header height
@@ -30,91 +37,118 @@ class DashboardHeader extends StatelessWidget {
           ), // border-slate-800
         ),
       ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
+      padding: EdgeInsets.symmetric(
+        horizontal: isVerySmall ? 8 : (isSmall ? 16 : 24),
         vertical: 16,
-      ), // px-6 py-4
+      ),
       child: Row(
         children: [
-          // Search Bar (on the left)
-          Expanded(
-            flex: 1,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 384), // max-w-md
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1E293B), // bg-slate-800
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: const Color(0xFF334155),
-                  ), // border-slate-700
+          // Hamburger Menu Button (visible on mobile to open drawer)
+          if (showMenuButton)
+            Builder(
+              builder: (builderContext) => IconButton(
+                icon: const Icon(
+                  Icons.menu,
+                  color: Color(0xFFCBD5E1), // text-slate-300
+                  size: 24,
                 ),
-                child: TextField(
-                  controller: searchController,
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
-                  decoration: InputDecoration(
-                    hintText: 'Search...',
-                    hintStyle: const TextStyle(
-                      color: Color(0xFF94A3B8),
-                    ), // text-slate-400
-                    prefixIcon: const Icon(
-                      Icons.search,
-                      color: Color(0xFF94A3B8), // text-slate-400
-                      size: 16, // h-4 w-4
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
+                onPressed:
+                    onMenuPressed ??
+                    () {
+                      // Use Scaffold.of to find the nearest Scaffold and open drawer
+                      Scaffold.of(builderContext).openDrawer();
+                    },
+                tooltip: 'Open menu',
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+            ),
+          if (showMenuButton) SizedBox(width: isVerySmall ? 4 : 8),
+          // Search Bar (on the left) - Hide on very small screens
+          if (!isVerySmall)
+            Expanded(
+              flex: 1,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 384), // max-w-md
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E293B), // bg-slate-800
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: const Color(0xFF334155),
+                    ), // border-slate-700
+                  ),
+                  child: TextField(
+                    controller: searchController,
+                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                    decoration: InputDecoration(
+                      hintText: 'Search...',
+                      hintStyle: const TextStyle(
+                        color: Color(0xFF94A3B8),
+                      ), // text-slate-400
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: Color(0xFF94A3B8), // text-slate-400
+                        size: 16, // h-4 w-4
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
 
-          const SizedBox(width: 16), // gap-4
-          // Right side actions
+          if (!isVerySmall) SizedBox(width: isSmall ? 8 : 16),
+          // Right side actions - Responsive layout
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // User Info
-              Row(
-                children: [
-                  const Icon(
-                    Icons.people,
-                    color: Color(0xFFCBD5E1), // text-slate-300
-                    size: 20, // h-5 w-5
-                  ),
-                  const SizedBox(width: 8),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        displayRole,
-                        style: const TextStyle(
-                          color: Color(0xFF94A3B8), // text-slate-400
-                          fontSize: 12,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 140,
-                        child: Text(
-                          displayUsername,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
+              // User Info - Hide text on very small screens, show only on larger screens
+              if (!isVerySmall)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.people,
+                      color: Color(0xFFCBD5E1), // text-slate-300
+                      size: 18, // Slightly smaller
+                    ),
+                    SizedBox(width: isSmall ? 4 : 8),
+                    if (!isSmall)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            displayRole,
+                            style: const TextStyle(
+                              color: Color(0xFF94A3B8), // text-slate-400
+                              fontSize: 11,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                          Text(
+                            displayUsername,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                  ],
+                ),
 
-              const SizedBox(width: 16),
+              SizedBox(width: isVerySmall ? 4 : 8),
 
               // Notification Bell
               Material(
@@ -125,7 +159,7 @@ class DashboardHeader extends StatelessWidget {
                   },
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(isVerySmall ? 6 : 8),
                     child: const Icon(
                       Icons.notifications_outlined,
                       color: Color(0xFFCBD5E1), // text-slate-300
@@ -135,20 +169,22 @@ class DashboardHeader extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(width: 8),
+              SizedBox(width: isVerySmall ? 4 : 8),
 
               // User Avatar
               Container(
-                width: 32, // w-8
-                height: 32, // h-8
+                width: isVerySmall
+                    ? 28
+                    : 32, // Slightly smaller on very small screens
+                height: isVerySmall ? 28 : 32,
                 decoration: BoxDecoration(
                   color: const Color(0xFF9333EA), // bg-purple-600
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.person,
                   color: Colors.white,
-                  size: 16, // h-4 w-4
+                  size: isVerySmall ? 14 : 16,
                 ),
               ),
             ],

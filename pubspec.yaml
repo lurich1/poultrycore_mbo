@@ -50,6 +50,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  
+  # Device Preview - For testing UI on different device sizes
+  device_preview: ^1.1.2
 
 
 # For information on the generic Dart part of this file, see the

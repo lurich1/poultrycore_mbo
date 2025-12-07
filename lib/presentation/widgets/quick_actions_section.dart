@@ -24,8 +24,8 @@ class QuickActionsSection extends StatelessWidget {
             Column(
               children: [
                 _ActionButton(
-                  label: 'Log Production',
-                  icon: Icons.list,
+                  label: '0 Log Production',
+                  icon: Icons.checklist,
                   color: Colors.green,
                   onPressed: () {
                     // Handle log production
@@ -33,7 +33,7 @@ class QuickActionsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 _ActionButton(
-                  label: 'Record Sale',
+                  label: '\$ Record Sale',
                   icon: Icons.attach_money,
                   color: Colors.orange,
                   onPressed: () {
@@ -52,8 +52,8 @@ class QuickActionsSection extends StatelessWidget {
                 const SizedBox(height: 12),
                 _ActionButton(
                   label: 'Add Flock',
-                  icon: Icons.attach_file,
-                  color: Colors.white,
+                  icon: Icons.pets, // Changed to bird icon to match web version
+                  color: const Color(0xFFADD8E6), // Light blue color
                   textColor: Colors.black,
                   borderColor: Colors.grey,
                   onPressed: () {

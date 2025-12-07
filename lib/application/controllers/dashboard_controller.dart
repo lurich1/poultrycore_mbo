@@ -39,7 +39,7 @@ class DashboardController extends StateNotifier<DashboardState> {
       SummaryCard(
         title: 'TOTAL CUSTOMERS',
         value: '${summary.totalCustomers}',
-        trend: '↑ 12% Since last month',
+        trend: null,
         isPositiveTrend: true,
         icon: Icons.people,
         iconColor: Colors.blue,
@@ -47,7 +47,7 @@ class DashboardController extends StateNotifier<DashboardState> {
       SummaryCard(
         title: 'TOTAL PRODUCTION',
         value: '${summary.totalProduction}',
-        trend: '↑ 8% Since last month',
+        trend: null,
         isPositiveTrend: true,
         icon: Icons.trending_up,
         iconColor: Colors.green,
@@ -55,7 +55,7 @@ class DashboardController extends StateNotifier<DashboardState> {
       SummaryCard(
         title: 'TOTAL EGGS',
         value: '${summary.totalEggs}',
-        trend: '↑ 15% Since last month',
+        trend: null,
         isPositiveTrend: true,
         icon: Icons.circle,
         iconColor: Colors.orange,
@@ -63,7 +63,7 @@ class DashboardController extends StateNotifier<DashboardState> {
       SummaryCard(
         title: 'ACTIVE FLOCKS',
         value: '${summary.activeFlocks}',
-        trend: '↑ ${summary.activeFlocks} Since last month',
+        trend: null,
         isPositiveTrend: true,
         icon: Icons.pets,
         iconColor: Colors.purple,
@@ -71,7 +71,7 @@ class DashboardController extends StateNotifier<DashboardState> {
       SummaryCard(
         title: 'TOTAL SALES',
         value: 'GH₵${summary.totalSales.toStringAsFixed(2)}',
-        trend: '${summary.salesTransactions} transactions',
+        trend: null,
         isPositiveTrend: true,
         icon: Icons.attach_money,
         iconColor: Colors.green,
@@ -79,7 +79,7 @@ class DashboardController extends StateNotifier<DashboardState> {
       SummaryCard(
         title: 'THIS MONTH SALES',
         value: 'GH₵${summary.thisMonthSales.toStringAsFixed(2)}',
-        trend: '↑ 18% Since last month',
+        trend: null,
         isPositiveTrend: true,
         icon: Icons.bar_chart,
         iconColor: Colors.blue,
@@ -87,7 +87,7 @@ class DashboardController extends StateNotifier<DashboardState> {
       SummaryCard(
         title: 'AVERAGE SALE',
         value: 'GH₵${summary.averageSale.toStringAsFixed(2)}',
-        trend: '↑ 5% Since last month',
+        trend: null,
         isPositiveTrend: true,
         icon: Icons.account_balance_wallet,
         iconColor: Colors.purple,
@@ -95,7 +95,7 @@ class DashboardController extends StateNotifier<DashboardState> {
       SummaryCard(
         title: 'PRODUCTION EFFICIENCY',
         value: '${summary.productionEfficiency.toStringAsFixed(1)}%',
-        trend: '↑ 2.1% Since last month',
+        trend: null,
         isPositiveTrend: true,
         icon: Icons.check_circle,
         iconColor: Colors.blue,
