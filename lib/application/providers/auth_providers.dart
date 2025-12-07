@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/config/app_config.dart';
 import '../../data/datasources/auth_datasource.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -16,10 +17,10 @@ import '../states/auth_state.dart';
 final authDioProvider = Provider<Dio>((ref) {
   final dio = Dio();
 
-  // Configure Dio for production
+  // Configure Dio
   dio.options = BaseOptions(
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
+    connectTimeout: const Duration(seconds: 60), // Increased timeout
+    receiveTimeout: const Duration(seconds: 60), // Increased timeout
     headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
     validateStatus: (status) {
       return status! < 500; // Accept all status codes < 500
@@ -31,9 +32,8 @@ final authDioProvider = Provider<Dio>((ref) {
 
 // Base URL for authentication API
 final authBaseUrlProvider = Provider<String>((ref) {
-  // User Management API URL (Login API)
-  // Production: https://usermanagementapi.poultrycore.com
-  return 'https://usermanagementapi.poultrycore.com';
+  // User Management API URL (Login API) - loaded from environment
+  return AppConfig.authApiBaseUrl;
 });
 
 // Data sources

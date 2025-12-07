@@ -40,7 +40,7 @@ class CustomerController extends StateNotifier<CustomerState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final created = await createCustomerUseCase(customer);
+      await createCustomerUseCase(customer);
       // Reload customers to include the new one
       await loadCustomers();
       return true;

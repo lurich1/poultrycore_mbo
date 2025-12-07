@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/config/app_config.dart';
 import 'presentation/screens/login_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables
+  await AppConfig.load();
+
   runApp(
     // Wrap app with ProviderScope for Riverpod
     const ProviderScope(child: PoultryCoreApp()),

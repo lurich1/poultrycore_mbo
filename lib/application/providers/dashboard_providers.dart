@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../application/providers/auth_providers.dart';
+import '../../core/config/app_config.dart';
 import '../../data/datasources/dashboard_datasource.dart';
 import '../../data/repositories/dashboard_repository_impl.dart';
 import '../../domain/repositories/dashboard_repository.dart';
@@ -14,8 +15,8 @@ import '../states/dashboard_state.dart';
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio();
   dio.options = BaseOptions(
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
+    connectTimeout: const Duration(seconds: 60), // Increased timeout
+    receiveTimeout: const Duration(seconds: 60), // Increased timeout
     headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
     validateStatus: (status) {
       return status! < 500; // Accept all status codes < 500
@@ -26,9 +27,8 @@ final dioProvider = Provider<Dio>((ref) {
 
 // Base URL - Poultry Farm API
 final baseUrlProvider = Provider<String>((ref) {
-  // Poultry Farm API URL
-  // Production: https://farmapi.poultrycore.com
-  return 'https://farmapi.poultrycore.com';
+  // Poultry Farm API URL - loaded from environment
+  return AppConfig.farmApiBaseUrl;
 });
 
 // Dashboard data source
